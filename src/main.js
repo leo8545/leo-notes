@@ -15,11 +15,17 @@ if (addNoteForm) {
 		if (!title) {
 			alert("title can not be empty");
 		} else {
+			const date = new Date();
 			const newNote = {
 				title,
 				content,
 				tags,
-				createdAt: new Date().toJSON(),
+				createdAt: `${String(date.getDate()).padStart(2, "0")}.${String(
+					date.getMonth() + 1
+				).padStart(
+					2,
+					"0"
+				)}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 			};
 			document.dispatchEvent(
 				new CustomEvent("noteAdded", { detail: { newNote, prevNotes: notes } })
@@ -41,12 +47,14 @@ if (addNoteForm) {
 			const li = document.createElement("li");
 			const title = document.createElement("div");
 			const date = document.createElement("div");
+			title.classList.add("title");
+			date.classList.add("date");
 			title.textContent = e.detail.newNote.title;
 			date.textContent = e.detail.newNote.createdAt;
 			li.append(title);
 			li.append(date);
 			list.append(li);
-			li.classList.add("magictime", "slideRightReturn");
+			li.classList.add("note-item", "magictime", "boingInUp");
 		}
 	});
 }
