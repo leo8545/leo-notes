@@ -26,6 +26,11 @@ h3 {
 		overflow-y: auto;
 		overflow-x: hidden;
 		.note-item {
+			header {
+				& > * {
+					display: inline-block;
+				}
+			}
 			.date {
 				color: #666;
 				font-size: 80%;
