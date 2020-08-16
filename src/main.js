@@ -46,6 +46,7 @@ if (addNoteForm) {
 			li.append(title);
 			li.append(date);
 			list.append(li);
+			li.classList.add("magictime", "slideRightReturn");
 		}
 	});
 }
