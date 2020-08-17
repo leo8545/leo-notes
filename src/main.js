@@ -11,7 +11,7 @@ if (addNoteForm) {
 		// Form data
 		const title = addNoteForm.querySelector("#title").value;
 		const content = addNoteForm.querySelector("#content").value;
-		const tags = addNoteForm.querySelector("#tags").value;
+		// const tags = addNoteForm.querySelector("#tags").value;
 
 		if (!title) {
 			alert("title can not be empty");
@@ -21,7 +21,7 @@ if (addNoteForm) {
 				const newNote = {
 					title,
 					content,
-					tags,
+					// tags,
 					id: Date.now(),
 					createdAt: `${String(date.getDate()).padStart(2, "0")}.${String(
 						date.getMonth() + 1
@@ -40,7 +40,7 @@ if (addNoteForm) {
 				// Empty the form fields
 				addNoteForm.querySelector("#title").value = "";
 				addNoteForm.querySelector("#content").value = "";
-				addNoteForm.querySelector("#tags").value = "";
+				// addNoteForm.querySelector("#tags").value = "";
 			} else if (t === "edit") {
 				const id = parseInt(document.querySelector("#note_id").value);
 				const note = document.querySelector(`li[id="${id}"]`);
@@ -51,7 +51,7 @@ if (addNoteForm) {
 					// Empty the form fields
 					addNoteForm.querySelector("#title").value = "";
 					addNoteForm.querySelector("#content").value = "";
-					addNoteForm.querySelector("#tags").value = "";
+					// addNoteForm.querySelector("#tags").value = "";
 
 					// Reset form type back to add
 					document.querySelector("#type").value = "add";
@@ -60,7 +60,6 @@ if (addNoteForm) {
 					document.querySelector("#btnAddNote").textContent = "Add Note";
 					document.querySelector("#btnAddNote").classList.remove("btn-edit");
 				}
-				console.log(notes);
 			}
 		}
 	});
@@ -80,21 +79,27 @@ if (addNoteForm) {
 			const date = document.createElement("div");
 			const content = document.createElement("div");
 			const btnEdit = document.createElement("button");
+			const btnDelete = document.createElement("button");
 
 			title.classList.add("title");
 			date.classList.add("date");
 			content.classList.add("content");
 			btnEdit.classList.add("editNote");
+			btnDelete.classList.add("deleteNote");
 			btnEdit.setAttribute("data-note", e.detail.newNote.id);
 
 			title.textContent = e.detail.newNote.title;
 			date.textContent = e.detail.newNote.createdAt;
 			content.textContent = e.detail.newNote.content;
-			btnEdit.textContent = "Edit";
+			btnEdit.innerHTML =
+				"<img src='img/edit-icon.png' class='icons edit-icon' />";
+			btnDelete.innerHTML =
+				"<img src='img/delete-icon.png' class='icons delete-icon' />";
 
 			foot.append(date);
 			head.append(title);
 			head.append(btnEdit);
+			head.append(btnDelete);
 			article.append(content);
 
 			li.append(head);
@@ -134,6 +139,26 @@ document.addEventListener("noteListItemAdded", (event) => {
 				document.querySelector(".form-heading").textContent = "Edit note:";
 				document.querySelector("#btnAddNote").textContent = "Edit Note";
 				document.querySelector("#btnAddNote").classList.add("btn-edit");
+			}
+		});
+	});
+
+	// On note delete
+	document.querySelectorAll(".deleteNote").forEach((btn) => {
+		btn.addEventListener("click", (e) => {
+			e.preventDefault();
+			const note = notes.filter(
+				(note) => note.id === parseInt(btn.parentNode.parentNode.id)
+			);
+			if (
+				note &&
+				document.querySelector(`li[id="${btn.parentNode.parentNode.id}"]`)
+			) {
+				document
+					.querySelector(`li[id="${btn.parentNode.parentNode.id}"]`)
+					.remove();
+				notes.splice(notes.indexOf(note[0]), 1);
+				console.log(notes);
 			}
 		});
 	});
