@@ -64,7 +64,7 @@ h3 {
 			resize: none;
 		}
 	}
-	button {
+	.btn {
 		padding: 10px 25px;
 		background-color: #4285f4;
 		color: #fff;
@@ -76,5 +76,12 @@ h3 {
 		&.btn-edit {
 			background-color: orangered;
 		}
+	}
+	button {
+		border: none;
+	}
+	.icons {
+		width: 20px;
+		cursor: pointer;
 	}
 }
