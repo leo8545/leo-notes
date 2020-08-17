@@ -55,6 +55,10 @@ if (addNoteForm) {
 
 					// Reset form type back to add
 					document.querySelector("#type").value = "add";
+					document.querySelector(".form-heading").textContent =
+						"Create a note:";
+					document.querySelector("#btnAddNote").textContent = "Add Note";
+					document.querySelector("#btnAddNote").classList.remove("btn-edit");
 				}
 				console.log(notes);
 			}
@@ -126,6 +130,10 @@ document.addEventListener("noteListItemAdded", (event) => {
 				addNoteForm.querySelector("#content").value = note[0].content;
 				addNoteForm.querySelector("#note_id").value = note[0].id;
 				addNoteForm.querySelector("#title").focus();
+
+				document.querySelector(".form-heading").textContent = "Edit note:";
+				document.querySelector("#btnAddNote").textContent = "Edit Note";
+				document.querySelector("#btnAddNote").classList.add("btn-edit");
 			}
 		});
 	});

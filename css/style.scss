@@ -73,5 +73,8 @@ h3 {
 		&:hover {
 			background-color: #4285f4cc;
 		}
+		&.btn-edit {
+			background-color: orangered;
+		}
 	}
 }
