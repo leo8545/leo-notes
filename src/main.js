@@ -6,6 +6,8 @@ if (addNoteForm) {
 	addNoteForm.addEventListener("submit", (e) => {
 		e.preventDefault();
 
+		const t = document.querySelector("#type").value;
+
 		// Form data
 		const title = addNoteForm.querySelector("#title").value;
 		const content = addNoteForm.querySelector("#content").value;
@@ -15,27 +17,47 @@ if (addNoteForm) {
 			alert("title can not be empty");
 		} else {
 			const date = new Date();
-			const newNote = {
-				title,
-				content,
-				tags,
-				id: Date.now(),
-				createdAt: `${String(date.getDate()).padStart(2, "0")}.${String(
-					date.getMonth() + 1
-				).padStart(
-					2,
-					"0"
-				)}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-			};
-			document.dispatchEvent(
-				new CustomEvent("noteAdded", { detail: { newNote, prevNotes: notes } })
-			);
-			notes.push(newNote);
+			if (t === "add") {
+				const newNote = {
+					title,
+					content,
+					tags,
+					id: Date.now(),
+					createdAt: `${String(date.getDate()).padStart(2, "0")}.${String(
+						date.getMonth() + 1
+					).padStart(
+						2,
+						"0"
+					)}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+				};
+				document.dispatchEvent(
+					new CustomEvent("noteAdded", {
+						detail: { newNote, prevNotes: notes },
+					})
+				);
+				notes.push(newNote);
 
-			// Empty the form fields
-			addNoteForm.querySelector("#title").value = "";
-			addNoteForm.querySelector("#content").value = "";
-			addNoteForm.querySelector("#tags").value = "";
+				// Empty the form fields
+				addNoteForm.querySelector("#title").value = "";
+				addNoteForm.querySelector("#content").value = "";
+				addNoteForm.querySelector("#tags").value = "";
+			} else if (t === "edit") {
+				const id = parseInt(document.querySelector("#note_id").value);
+				const note = document.querySelector(`li[id="${id}"]`);
+				if (note) {
+					note.querySelector(".title").textContent = title;
+					note.querySelector(".content").textContent = content;
+
+					// Empty the form fields
+					addNoteForm.querySelector("#title").value = "";
+					addNoteForm.querySelector("#content").value = "";
+					addNoteForm.querySelector("#tags").value = "";
+
+					// Reset form type back to add
+					document.querySelector("#type").value = "add";
+				}
+				console.log(notes);
+			}
 		}
 	});
 
@@ -90,12 +112,20 @@ document.addEventListener("noteListItemAdded", (event) => {
 	document.querySelectorAll(".editNote").forEach((btn) => {
 		btn.addEventListener("click", (e) => {
 			e.preventDefault();
+			document.querySelector("#type").value = "edit";
 			const note = notes.filter(
 				(note) => note.id === parseInt(btn.parentNode.parentNode.id)
 			);
 			if (note) {
+				const li = document.querySelector(`li[id="${note[0].id}"]`);
+
+				note[0].title = li.querySelector(".title").textContent;
+				note[0].content = li.querySelector(".content").textContent;
+
 				addNoteForm.querySelector("#title").value = note[0].title;
 				addNoteForm.querySelector("#content").value = note[0].content;
+				addNoteForm.querySelector("#note_id").value = note[0].id;
+				addNoteForm.querySelector("#title").focus();
 			}
 		});
 	});
